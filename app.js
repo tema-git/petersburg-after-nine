@@ -32,6 +32,7 @@
     document.querySelectorAll('.route-stop').forEach(b => { const active=b.dataset.selectPlace===state.selected; b.classList.toggle('is-selected',active); b.setAttribute('aria-pressed',String(active)); });
   }
   function selectPlace(id) { state.selected=id; if(map) map.select(id); renderPreview(); }
+  function choosePlace(id) { selectPlace(id); if (matchMedia('(max-width:840px)').matches) openPlace(id); }
   function renderStops() {
     const ids=sequence(), walk=legs();
     $('route-stops').style.setProperty('--stop-count',ids.length);
@@ -98,11 +99,11 @@
   $('dialog-visit').addEventListener('click',()=>{if(!modalId)return;state.visited.has(modalId)?state.visited.delete(modalId):state.visited.add(modalId);updateVisited();});
   document.addEventListener('click',event=>{
     const open=event.target.closest('[data-open-place]'); if(open)openPlace(open.dataset.openPlace);
-    const select=event.target.closest('[data-select-place]'); if(select)selectPlace(select.dataset.selectPlace);
+    const select=event.target.closest('[data-select-place]'); if(select)choosePlace(select.dataset.selectPlace);
     const visit=event.target.closest('[data-visit]'); if(visit){const id=visit.dataset.visit;state.visited.has(id)?state.visited.delete(id):state.visited.add(id);updateVisited();}
   });
   renderGallery();
-  map=window.initNightMap({container:$('atlas-map'),data:window.NIGHT_MAP,places,onSelect:selectPlace});
+  map=window.initNightMap({container:$('atlas-map'),data:window.NIGHT_MAP,places,onSelect:choosePlace});
   setExtra(state.extra); selectPlace('sonya');
   $('map-zoom-in').addEventListener('click',()=>map.zoomBy(1.3));
   $('map-zoom-out').addEventListener('click',()=>map.zoomBy(1/1.3));
