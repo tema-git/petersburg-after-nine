@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111c2d">
+  <meta name="robots" content="noindex,nofollow">
+  <meta name="description" content="Ночная прогулка по Петербургу 31 октября: Sonya, Франс, Сидрерия и VNVNC. Карта, фотографии, свой темп и маленькое приключение для двоих.">
+  <meta property="og:title" content="После девяти — ночной маршрут по Петербургу">
+  <meta property="og:description" content="Франс, Сидрерия, немного городских историй — и танцы до утра. Соберите свой вечер.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/photos/vnvnc-lights.webp">
+  <title>После девяти — Петербург, 31 октября</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="preload" href="assets/fonts/prata.ttf" as="font" type="font/ttf" crossorigin>
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="stylesheet" href="root.css">
+  <script defer src="assets/vendor/d3.min.js"></script>
+  <script defer src="assets/vendor/gsap.min.js"></script>
+  <script defer src="assets/vendor/ScrollTrigger.min.js"></script>
+  <script defer src="map-data.js"></script>
+  <script defer src="places.js"></script>
+  <script defer src="map.js"></script>
+  <script defer src="game.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body id="top">
+  <a class="skip-link" href="#route">К маршруту</a>
+  <svg aria-hidden="true" focusable="false" class="icon-sprite" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="i-arrow" viewBox="0 0 24 24"><path d="M4 12h15m-6-6 6 6-6 6"/></symbol>
+    <symbol id="i-close" viewBox="0 0 24 24"><path d="m6 6 12 12M18 6 6 18"/></symbol>
+    <symbol id="i-menu" viewBox="0 0 24 24"><path d="M3 7h18M3 17h18"/></symbol>
+    <symbol id="i-check" viewBox="0 0 24 24"><path d="m5 12 4 4L19 6"/></symbol>
+    <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+    <symbol id="i-minus" viewBox="0 0 24 24"><path d="M5 12h14"/></symbol>
+    <symbol id="i-reset" viewBox="0 0 24 24"><path d="M4 10a8 8 0 1 1 1.2 6M4 4v6h6"/></symbol>
+    <symbol id="i-walk" viewBox="0 0 24 24"><circle cx="14" cy="3.5" r="1.5"/><path d="m7 21 3-7m5 7-2-6-2-3 2-6 3 4 4 1M5 10l4-3 4-1"/></symbol>
+    <symbol id="i-clock" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 6v6l4 2"/></symbol>
+    <symbol id="i-pin" viewBox="0 0 24 24"><path d="M20 10c0 6-8 12-8 12S4 16 4 10a8 8 0 1 1 16 0Z"/><circle cx="12" cy="10" r="2.5"/></symbol>
+    <symbol id="i-moon" viewBox="0 0 24 24"><path d="M20.5 14.5A9 9 0 0 1 9.5 3.5a9 9 0 1 0 11 11Z"/></symbol>
+    <symbol id="i-share" viewBox="0 0 24 24"><path d="M12 16V3m-4 4 4-4 4 4M5 13v7h14v-7"/></symbol>
+    <symbol id="i-download" viewBox="0 0 24 24"><path d="M12 3v12m-4-4 4 4 4-4M4 17v4h16v-4"/></symbol>
+    <symbol id="i-phone" viewBox="0 0 24 24"><path d="M7 3H3c-1 10 8 19 18 18v-4l-5-2-2 3c-4-1-7-4-8-8l3-2Z"/></symbol>
+    <symbol id="i-copy" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="13" rx="2"/><path d="M16 8V3H3v13h5"/></symbol>
+    <symbol id="i-photo" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="8" cy="9" r="1.5"/><path d="m3 17 5-5 4 4 4-6 5 7"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 2.5 7.5L22 12l-7.5 2.5L12 22l-2.5-7.5L2 12l7.5-2.5Z"/></symbol>
+  </svg>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="После девяти — в начало"><svg aria-hidden="true" focusable="false" class="icon brand-icon"><use href="#i-moon"/></svg><span>После девяти</span></a>
+    <nav class="desktop-nav" aria-label="Основная навигация"><a href="#route">Маршрут</a><a href="#places">Места</a><a href="#play">Приключение</a></nav>
+    <div class="header-actions"><a class="button button-accent compact" href="#contacts">Контакты<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></a><button class="icon-button menu-toggle" type="button" aria-label="Открыть меню" aria-expanded="false" aria-controls="mobile-nav"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-menu"/></svg></button></div>
+    <nav class="mobile-nav" id="mobile-nav" aria-label="Мобильная навигация" hidden><a href="#route">Маршрут и карта</a><a href="#places">Все места</a><a href="#plan">Собрать вечер</a><a href="#play">Ночной детектив</a></nav>
+    <span class="page-progress" aria-hidden="true"></span>
+  </header>
+
+  <main>
+    <section class="hero scene" data-scene>
+      <div class="hero-copy">
+        <p class="date-line"><span class="date-dot"></span>31 октября 2026 · для двоих</p>
+        <h1>Петербург<br>после девяти</h1>
+        <p class="hero-description">Сначала — разговоры, бильярд и сидр. Потом — городские мосты и танцы до утра.</p>
+        <div class="hero-actions"><a class="button button-accent" href="#route">Открыть карту<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></a><a class="text-link" href="#plan">Собрать свой вечер<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></a></div>
+        <div class="hero-facts"><span><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-walk"/></svg><b data-total-distance>2,3 км</b> по улицам</span><span><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-clock"/></svg><b data-total-walk>35 минут</b> пешком</span></div>
+      </div>
+      <div class="hero-art" aria-label="Фотография VNVNC">
+        <div class="hero-photo-scroll"><div class="hero-photo-pointer"><img src="assets/photos/vnvnc-lights.webp" alt="Световая сцена и зал VNVNC" width="1600" height="1067" fetchpriority="high"></div></div>
+        <span class="hero-photo-shade" aria-hidden="true"></span>
+        <div class="moon-orbit" aria-hidden="true"><span class="moon-disc"></span><span class="orbit-line"></span></div>
+        <div class="hero-photo-caption"><span>Финал ночи</span><strong>VNVNC</strong><span>Конюшенная площадь, 2В</span></div>
+        <button class="hero-photo-open icon-button" type="button" data-open-place="vnvnc" aria-label="Посмотреть фотографии VNVNC"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-photo"/></svg></button>
+      </div>
+      <div class="hero-foot"><span>Sonya</span><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-arrow"/></svg><span>Франс</span><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-arrow"/></svg><span>Сидрерия</span><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-arrow"/></svg><span>VNVNC</span></div>
+    </section>
+
+    <section class="atlas-section section scene" id="route" data-scene aria-labelledby="route-heading">
+      <div class="section-heading"><div><p class="section-note">От Литейного к Конюшенной</p><h2 id="route-heading">У ночи есть<br>свой маршрут</h2></div><p>Нажмите на место: откроются фотография, описание и полезные ссылки. Карту можно приближать и двигать.</p></div>
+      <div class="atlas-layout">
+        <div class="atlas-board">
+          <div class="atlas-topline"><span><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-walk"/></svg>Пешком, через мосты</span><span class="map-north">Север<svg aria-hidden="true" focusable="false" class="icon"><use href="#i-arrow"/></svg></span></div>
+          <div id="atlas-map" class="atlas-map" aria-label="Интерактивная карта маршрута"></div>
+          <div class="map-tools"><button class="icon-button" id="map-zoom-in" type="button" aria-label="Приблизить карту"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-plus"/></svg></button><button class="icon-button" id="map-zoom-out" type="button" aria-label="Отдалить карту"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-minus"/></svg></button><button class="icon-button" id="map-reset" type="button" aria-label="Показать весь маршрут"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-reset"/></svg></button></div>
+          <div class="atlas-caption"><span class="route-key">Основной путь</span><label class="toggle-inline"><input type="checkbox" id="map-sumbur"><span class="toggle-track" aria-hidden="true"></span><span>Зайти в «Сумбур» <b>+3 мин</b></span></label></div>
+          <p class="map-credit"><a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">© OpenStreetMap</a> · FOSSGIS OSRM · <span>время без остановок</span></p>
+        </div>
+        <aside class="place-preview" id="place-preview" aria-label="Выбранное место" aria-live="polite"></aside>
+      </div>
+      <div class="route-stops" id="route-stops" aria-label="Остановки по порядку"></div>
+      <div class="route-actions"><a class="button button-accent" id="navigator-link" href="https://yandex.ru/maps/" target="_blank" rel="noopener">Идти по маршруту<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></a><button class="text-link" id="share-plan" type="button">Поделиться планом<svg aria-hidden="true" focusable="false" class="icon"><use href="#i-share"/></svg></button><span id="route-status" class="status-message" aria-live="polite"></span></div>
+    </section>
+
+    <section class="planner-section section scene light-section" id="plan" data-scene aria-labelledby="plan-heading">
+      <div class="planner-intro"><p class="section-note">Темп вечера выбираете вы</p><h2 id="plan-heading">Никуда<br>не торопиться.<br>И всё успеть.</h2><p>Задайте время выхода и длительность остановок. Посмотрим, когда вы окажетесь у VNVNC.</p><div class="planner-orbit" aria-hidden="true"><svg viewBox="0 0 240 240"><circle cx="120" cy="120" r="100"/><circle cx="120" cy="120" r="72"/><path d="M120 45v75l47 32"/><circle class="orbit-dot" cx="120" cy="20" r="7"/></svg></div></div>
+      <div class="planner-workspace">
+        <div class="planner-start"><label for="start-time">Выходим из Sonya</label><input type="time" id="start-time" value="21:00" min="21:00" max="23:59" required></div>
+        <div class="planner-ranges">
+          <label class="range-field" for="stay-frans"><span>Во «Франсе»<output id="stay-frans-output">45 минут</output></span><input id="stay-frans" type="range" min="10" max="90" step="5" value="45"></label>
+          <label class="range-field" for="stay-cider"><span>В «Сидрерии»<output id="stay-cider-output">45 минут</output></span><input id="stay-cider" type="range" min="10" max="90" step="5" value="45"></label>
+          <div class="optional-stay"><label class="toggle-inline"><input type="checkbox" id="plan-sumbur"><span class="toggle-track" aria-hidden="true"></span><span>Добавить «Сумбур» по дороге</span></label><label class="range-field" for="stay-sumbur" id="sumbur-range" hidden><span>В «Сумбуре»<output id="stay-sumbur-output">15 минут</output></span><input id="stay-sumbur" type="range" min="10" max="60" step="5" value="15"></label></div>
+        </div>
+        <ol class="plan-timeline" id="plan-timeline" aria-label="План по времени"></ol>
+        <div class="arrival-result" id="arrival-result" aria-live="polite"><span>У дверей VNVNC</span><strong id="arrival-time">23:02</strong><p id="arrival-note"></p></div>
+        <div class="planner-actions"><button class="button button-dark" id="download-plan" type="button">Сохранить план<svg aria-hidden="true" focusable="false" class="icon"><use href="#i-download"/></svg></button><button class="text-link" id="reset-plan" type="button">Вернуть исходный темп<svg aria-hidden="true" focusable="false" class="icon"><use href="#i-reset"/></svg></button></div>
+        <p class="small-print">Расчёт приблизительный. В него не входят ожидание стола, очереди и светофоры. VNVNC открывается в 23:00; планируйте вход с 23:00, по условиям клуба.</p>
+      </div>
+    </section>
+
+    <section class="places-section section scene" id="places" data-scene aria-labelledby="places-heading">
+      <div class="section-heading"><div><p class="section-note">Пять мест, пять настроений</p><h2 id="places-heading">Заглянем<br>внутрь?</h2></div><p>Настоящие фотографии мест, небольшие описания и детали, которые пригодятся перед выходом.</p></div>
+      <div class="places-gallery" id="places-gallery"></div>
+      <div class="visited-panel"><div><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-check"/></svg><strong id="visited-count">0 из 4 остановок</strong><span>Отмечайте места, в которые уже зашли.</span></div><button class="text-link" id="reset-visited" type="button">Начать прогулку заново<svg aria-hidden="true" focusable="false" class="icon"><use href="#i-reset"/></svg></button></div>
+    </section>
+
+    <section class="game-section section scene" id="play" data-scene aria-labelledby="game-heading">
+      <div class="section-heading"><div><p class="section-note">Небольшое приключение для двоих</p><h2 id="game-heading">У города<br>пять секретов</h2></div><p>Откройте улики и соберите паспорт ночи. Это игра — проходить все места ради неё не нужно.</p></div>
+      <div id="night-game"></div>
+    </section>
+
+    <section class="contacts-section section scene light-section" id="contacts" data-scene aria-labelledby="contacts-heading">
+      <div class="contact-intro"><p class="section-note">Проверить места и договориться</p><h2 id="contacts-heading">Оставим<br>для вас стол?</h2><p>Выберите место и подготовьте текст запроса. Затем свяжитесь с заведением удобным способом.</p><div class="contact-links" id="contact-links"></div><div class="contact-note-art" aria-hidden="true"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-moon"/></svg><span>Два места<br>на эту ночь</span></div></div>
+      <div class="contact-form-wrap">
+        <form id="booking-form" novalidate>
+          <p class="form-note">Форма только готовит текст. Данные никуда не отправляются и не сохраняются, реальная бронь не создаётся.</p>
+          <div class="field"><label for="booking-place">Куда хотите заглянуть</label><select id="booking-place"><option value="frans">Франс</option><option value="cider">Сидрерия</option><option value="sumbur">Сумбур</option><option value="vnvnc">VNVNC</option></select></div>
+          <div class="form-two"><div class="field"><label for="booking-name">Как к вам обращаться</label><input id="booking-name" autocomplete="given-name" placeholder="Ваше имя" maxlength="60" required><span class="field-error" id="booking-name-error"></span></div><div class="field"><label for="booking-phone">Телефон для ответа</label><input id="booking-phone" type="tel" autocomplete="tel" placeholder="+7 999 123-45-67" maxlength="24" required><span class="field-error" id="booking-phone-error"></span></div></div>
+          <div class="form-two"><div class="field"><label for="booking-time">Время 31 октября</label><input id="booking-time" type="time" value="21:00" min="21:00" required><span class="field-error" id="booking-time-error"></span></div><div class="field"><label for="booking-guests">Сколько вас</label><select id="booking-guests"><option value="2">Двое</option><option value="3">Трое</option><option value="4">Четверо</option></select></div></div>
+          <button class="button button-dark form-submit" type="submit" disabled>Подготовить запрос<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></button>
+        </form>
+        <div class="booking-result" id="booking-result" hidden aria-live="polite"><span class="result-seal"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-check"/></svg></span><h3>Текст запроса готов</h3><p>Он никуда не отправлен. Бронь появится только после подтверждения заведением.</p><textarea id="booking-draft" aria-label="Подготовленный текст запроса" readonly rows="6"></textarea><div class="result-actions"><button class="button button-dark" id="copy-booking" type="button">Скопировать текст<svg aria-hidden="true" focusable="false" class="icon"><use href="#i-copy"/></svg></button><a class="text-link" id="booking-contact" href="https://t.me/frans_restik" target="_blank" rel="noopener">Контакт заведения<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></a><button class="text-link" id="booking-again" type="button">Подготовить ещё один<svg aria-hidden="true" focusable="false" class="icon"><use href="#i-reset"/></svg></button></div><p id="booking-copy-status" aria-live="polite"></p></div>
+      </div>
+    </section>
+  </main>
+  <footer class="site-footer"><a class="brand" href="#top"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-moon"/></svg>После девяти</a><p>Неофициальный путеводитель на 31 октября 2026.<br>Программы и условия заведений проверены 30 октября. Подтверждайте бронь у команды места.</p><button class="text-link" id="open-credits" type="button">Фото и источники<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></button></footer>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <dialog id="place-dialog" class="place-dialog" aria-labelledby="dialog-place-title">
+    <div class="dialog-toolbar"><button class="icon-button dialog-close" id="close-place-dialog" type="button" aria-label="Закрыть описание"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-close"/></svg></button></div>
+    <div class="dialog-photo-wrap"><img id="dialog-photo" alt="" width="1200" height="900"><div class="photo-navigation"><button class="icon-button photo-prev" id="photo-prev" type="button" aria-label="Предыдущая фотография">Назад</button><span id="photo-counter">1 / 2</span><button class="icon-button" id="photo-next" type="button" aria-label="Следующая фотография"><svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></button></div></div>
+    <div class="dialog-copy"><p class="section-note" id="dialog-place-type"></p><h2 id="dialog-place-title"></h2><p class="dialog-address" id="dialog-place-address"></p><p id="dialog-place-description"></p><div class="place-facts" id="dialog-place-facts"></div><div class="dialog-actions"><a class="button button-accent" id="dialog-place-map" href="https://yandex.ru/maps/" target="_blank" rel="noopener">Найти вход<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></a><button class="text-link" id="dialog-visit" type="button">Отметить посещение<svg aria-hidden="true" focusable="false" class="icon"><use href="#i-check"/></svg></button></div><p class="photo-credit" id="dialog-photo-credit"></p><a class="text-link" id="dialog-source" href="#" target="_blank" rel="noopener">Описание у организатора<svg aria-hidden="true" focusable="false" class="icon cta-arrow"><use href="#i-arrow"/></svg></a></div>
+  </dialog>
+  <dialog id="credits-dialog" class="credits-dialog" aria-labelledby="credits-title"><div class="dialog-toolbar"><button class="icon-button dialog-close" id="close-credits" type="button" aria-label="Закрыть источники"><svg aria-hidden="true" focusable="false" class="icon"><use href="#i-close"/></svg></button></div><h2 id="credits-title">Город настоящий.<br>И фотографии тоже.</h2><p>Фотографии взяты из открытых карточек конкретных заведений и официального сайта «Сумбура». Авторские права принадлежат владельцам снимков.</p><div id="credits-list"></div><p>Картографические данные — <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap contributors</a>, пешеходный маршрут — FOSSGIS OSRM. Навигатор может предложить другую сторону улицы или уточнить последний подход ко входу.</p></dialog>
+  <noscript><div class="noscript-message">Для карты и интерактивов нужен JavaScript. Основной маршрут: Radisson Sonya, Литейный 5/19 — Франс, Пестеля 27 — Сидрерия, Моховая 30 — VNVNC, Конюшенная площадь 2В.</div></noscript>
+</body>
+</html>
