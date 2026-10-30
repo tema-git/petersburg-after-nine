@@ -49,7 +49,7 @@
       const arrive=t, stay=state[id]||0; t+=stay;
       return {id,arrive,depart:t,stay,walk:i?walk[i-1]:0};
     });
-    $('plan-timeline').innerHTML=rows.map(row=>'<li><span class="plan-time">'+clock(row.arrive)+'</span><span class="plan-dot" aria-hidden="true"></span><span class="plan-place"><strong>'+esc(byId[row.id].short)+'</strong><span>'+(row.id==='sonya'?'Выходим из отеля':row.id==='vnvnc'?'Конюшенная площадь, 2В':minText(row.stay)+' на остановку · выход '+clock(row.depart))+'</span></span></li>').join('');
+    $('plan-timeline').innerHTML=rows.map(row=>'<li><span class="plan-time">'+clock(row.arrive)+'</span><span class="plan-dot" aria-hidden="true"></span><span class="plan-place"><strong>'+esc(byId[row.id].short)+'</strong><span>'+(row.id==='sonya'?'Обнимка, костюмы — и выходим':row.id==='vnvnc'?'Конюшенная площадь, 2В':minText(row.stay)+' на остановку · выход '+clock(row.depart))+'</span></span></li>').join('');
     $('arrival-time').textContent=clock(t);
     const day=t>=1440?'Уже 1 ноября. ':'';
     $('arrival-note').textContent=t<1380?'До открытия ещё '+minText(1380-t)+'. Можно задержаться в баре или выйти позже.':day+'Двери открыты с 23:00. Оставьте запас на очередь и контроль входа.';
@@ -121,36 +121,19 @@
   });
   $('download-plan').addEventListener('click',()=>{
     const rows=renderPlan();
-    const text='ПОСЛЕ ДЕВЯТИ\n31 октября 2026 · Петербург\n\n'+rows.map(r=>clock(r.arrive)+' — '+byId[r.id].name+', '+byId[r.id].address+(r.stay?' · остановка '+minText(r.stay):'')+'\n'+byId[r.id].map).join('\n\n')+'\n\nВремя приблизительное. VNVNC открыт с 23:00. Уточните условия входа и бронирование у заведений.';
+    const text='НАШ ВЕЧЕР ПОСЛЕ ДЕВЯТИ\n31 октября 2026 · Петербург\nСначала в Sonya — встреча, обнимка и примерка костюмов.\nНе забыть паспорт!\n\n'+rows.map(r=>clock(r.arrive)+' — '+byId[r.id].name+', '+byId[r.id].address+(r.stay?' · остановка '+minText(r.stay):'')+'\n'+byId[r.id].map).join('\n\n')+'\n\nВремя приблизительное. VNVNC открыт с 23:00. Не забыть паспорт! Условия входа — по ссылкам заведений.';
     const url=URL.createObjectURL(new Blob([text],{type:'text/plain;charset=utf-8'}));const a=document.createElement('a');a.href=url;a.download='posle-devyati-plan.txt';document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);toast('План подготовлен к сохранению');
   });
-  $('contact-links').innerHTML=['frans','cider','sumbur','vnvnc'].map(id=>{const p=byId[id];return '<a href="'+p.contact+'" target="_blank" rel="noopener">'+icon(p.contact.startsWith('tel:')?'phone':'arrow',p.contact.startsWith('tel:')?'':'cta-arrow')+'<span>'+esc(p.name)+' · '+esc(p.contactLabel)+'</span></a>';}).join('');
   $('credits-list').innerHTML=places.map(p=>'<div class="credit-row"><strong>'+esc(p.name)+'</strong><a href="'+p.photos[0].source_url+'" target="_blank" rel="noopener">Фотографии и страница места</a></div>').join('');
   $('open-credits').addEventListener('click',()=>{$('credits-dialog').showModal();document.body.classList.add('modal-open');});
   $('close-credits').addEventListener('click',()=>closeDialog($('credits-dialog')));
-  const form=$('booking-form');
-  ['name','phone','time'].forEach(id=>{$('booking-'+id).setAttribute('aria-describedby','booking-'+id+'-error');$('booking-'+id).addEventListener('input',()=>{$('booking-'+id).removeAttribute('aria-invalid');$('booking-'+id+'-error').textContent='';});});
-  form.addEventListener('submit',event=>{
-    event.preventDefault();const name=$('booking-name').value.trim(),phone=$('booking-phone').value.trim(),time=$('booking-time').value,digits=phone.replace(/\D/g,'');
-    const errors={name:(name.match(/[a-zа-яё]/gi)||[]).length<2?'Введите имя — хотя бы две буквы.':'',phone:!(/^[78]\d{10}$/.test(digits)||/^9\d{9}$/.test(digits))?'Введите российский номер из 10 или 11 цифр.':'',time:!/^([01]\d|2[0-3]):[0-5]\d$/.test(time)||time<($('booking-place').value==='vnvnc'?'23:00':'21:00')?'Укажите время от '+($('booking-place').value==='vnvnc'?'23:00':'21:00')+'.':''};
-    let first=null;Object.entries(errors).forEach(([id,msg])=>{$('booking-'+id+'-error').textContent=msg;if(msg){$('booking-'+id).setAttribute('aria-invalid','true');first=first||$('booking-'+id);}else $('booking-'+id).removeAttribute('aria-invalid');});
-    if(first){first.focus();return;}
-    const p=byId[$('booking-place').value];
-    $('booking-draft').value='Здравствуйте! Можно ли забронировать стол в «'+p.name+'» на 31 октября 2026, '+time+', на '+$('booking-guests').value+' человек? Будем в костюмах. Подскажите, пожалуйста, условия входа и участия в программе.\n\nИмя: '+name+'\nТелефон для ответа: '+phone;
-    $('booking-contact').href=p.contact;$('booking-contact').innerHTML=esc(p.contactLabel)+arrow();
-    form.hidden=true;$('booking-result').hidden=false;$('booking-name').value='';$('booking-phone').value='';$('booking-draft').focus();
-  });
-  $('booking-place').addEventListener('change',()=>{const min=$('booking-place').value==='vnvnc'?'23:00':'21:00';$('booking-time').min=min;if($('booking-time').value<min)$('booking-time').value=min;});
-  form.querySelector('button[type="submit"]').disabled=false;
-  $('copy-booking').addEventListener('click',async()=>{const ok=await copy($('booking-draft').value,$('booking-draft'));$('booking-copy-status').textContent=ok?'Текст скопирован. Передайте его заведению самостоятельно.':'Текст выделен — скопируйте его через меню браузера.';});
-  $('booking-again').addEventListener('click',()=>{form.reset();$('booking-time').min='21:00';$('booking-draft').value='';$('booking-copy-status').textContent='';$('booking-result').hidden=true;form.hidden=false;$('booking-name').focus();});
   const menu=document.querySelector('.menu-toggle');
   function closeMenu(){menu.setAttribute('aria-expanded','false');menu.setAttribute('aria-label','Открыть меню');$('mobile-nav').hidden=true;}
   menu.addEventListener('click',()=>{const open=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(open));menu.setAttribute('aria-label',open?'Закрыть меню':'Открыть меню');$('mobile-nav').hidden=!open;});
   document.querySelector('.site-header').addEventListener('click',event=>{if(event.target.closest('a'))closeMenu();});
   document.addEventListener('keydown',event=>{if(event.key==='Escape'&&menu.getAttribute('aria-expanded')==='true'){closeMenu();menu.focus();}});
   window.initNightGame('#night-game');
-  // Pointer light moves decoration only. Links, form fields and map targets stay still.
+  // Pointer light moves decoration only. Links and map targets stay still.
   const motion=matchMedia('(prefers-reduced-motion: reduce)'),fine=matchMedia('(hover:hover) and (pointer:fine)');
   document.querySelectorAll('[data-scene]').forEach(scene=>{
     let frame=0,x=0,y=0;
@@ -165,7 +148,7 @@
     mm.add('(prefers-reduced-motion: no-preference)',()=>{
       gsap.to('.hero-photo-scroll',{yPercent:12,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1}});
       document.querySelectorAll('.photo-scroll').forEach(photo=>gsap.fromTo(photo,{yPercent:-6},{yPercent:6,ease:'none',scrollTrigger:{trigger:photo.closest('.place-tile'),start:'top bottom',end:'bottom top',scrub:.7}}));
-      document.querySelectorAll('.section-heading h2,.planner-intro h2,.contact-intro h2').forEach(el=>gsap.from(el,{y:38,duration:.9,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 93%',once:true}}));
+      document.querySelectorAll('.section-heading h2,.planner-intro h2').forEach(el=>gsap.from(el,{y:38,duration:.9,ease:'power2.out',scrollTrigger:{trigger:el,start:'top 93%',once:true}}));
       gsap.to('.planner-orbit svg',{rotation:85,ease:'none',scrollTrigger:{trigger:'#plan',start:'top bottom',end:'bottom top',scrub:1}});
       gsap.fromTo('.moon-disc',{rotation:-15},{rotation:22,ease:'none',scrollTrigger:{trigger:'.hero',start:'top top',end:'bottom top',scrub:1}});
     });
